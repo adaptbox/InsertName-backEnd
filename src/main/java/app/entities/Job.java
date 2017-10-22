@@ -1,8 +1,6 @@
 package app.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,22 +12,16 @@ public class Job {
 
     @JsonIgnore
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @GenericGenerator(
-            name = "usersSequenceGenerator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = {
-                    @Parameter(name = "sequence_name", value = "usersSequence"),
-                    @Parameter(name = "initial_value", value = "1"),
-                    @Parameter(name = "increment_size", value = "1")
-            }
-    )
+    @JsonIgnore
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Estimate> estimates;
 
     @Id
-    @GeneratedValue(generator = "usersSequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String year;
@@ -85,5 +77,13 @@ public class Job {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Estimate> getEstimates() {
+        return estimates;
+    }
+
+    public void setEstimates(Set<Estimate> estimates) {
+        this.estimates = estimates;
     }
 }

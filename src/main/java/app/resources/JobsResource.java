@@ -43,7 +43,12 @@ public class JobsResource {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Job update(@RequestBody Job job) {
+    public Job update(@RequestBody JobDTO jobDTO) {
+        Job job = jobsServiceInterface.getJob(jobDTO.getId());
+        job.setYear(jobDTO.getYear());
+        job.setMake(jobDTO.getMake());
+        job.setModel(jobDTO.getModel());
+        job.setDescription(jobDTO.getDescription());
         return jobsServiceInterface.updateJob(job);
     }
 

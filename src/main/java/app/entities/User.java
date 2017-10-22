@@ -22,8 +22,12 @@ public class User {
     private Set<Role> roles;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Job> jobs;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Estimate> estimates;
 
     @GenericGenerator(
             name = "usersSequenceGenerator",
@@ -107,5 +111,13 @@ public class User {
 
     public void setJobs(Set<Job> jobs) {
         this.jobs = jobs;
+    }
+
+    public Set<Estimate> getEstimates() {
+        return estimates;
+    }
+
+    public void setEstimates(Set<Estimate> estimates) {
+        this.estimates = estimates;
     }
 }
