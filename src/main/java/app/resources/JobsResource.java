@@ -1,13 +1,16 @@
 package app.resources;
 
+import app.dto.JobDTO;
 import app.entities.Job;
 import app.interfaces.JobsServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/admin/jobs")
+@RequestMapping("/api/jobs")
 public class JobsResource {
 
     private JobsServiceInterface jobsServiceInterface;
@@ -19,9 +22,20 @@ public class JobsResource {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Job create(@RequestBody Job job) {
-        return jobsServiceInterface.createJob(job);
+    public Job create(@RequestBody JobDTO jobDTO) {
+        Job job = new Job();
+        job.setYear(jobDTO.getYear());
+        job.setMake(jobDTO.getMake());
+        job.setModel(jobDTO.getModel());
+        job.setDescription(jobDTO.getDescription());
+        return jobsServiceInterface.createJobForUser(job, jobDTO.getUserId());
     }
+
+    @GetMapping
+    public List<Job> getAllJobs() { return jobsServiceInterface.getAllJobs(); }
+
+    @GetMapping(value= "/user/{userId}")
+    public List<Job> getUserJobs(@PathVariable long userId) { return jobsServiceInterface.getAllJobsForUser(userId); }
 
     @GetMapping(value = "/{id}")
     public Job read(@PathVariable long id) {

@@ -1,6 +1,7 @@
 package app.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
@@ -9,7 +10,7 @@ import org.hibernate.annotations.Parameter;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name="users")
 public class User {
 
     /*
@@ -20,7 +21,8 @@ public class User {
     @JoinTable
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Job> jobs;
 
     @GenericGenerator(
@@ -36,12 +38,18 @@ public class User {
     @Id
     @GeneratedValue(generator = "usersSequenceGenerator")
     private long id;
+
+    @NotNull
     private String name;
+
+    @NotNull
     private String email;
 
+    @NotNull
     @JsonIgnore
     private String password;
 
+    @NotNull
     private boolean enabled;
 
 

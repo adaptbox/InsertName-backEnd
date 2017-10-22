@@ -5,13 +5,16 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
-@Table(name = "jobs")
+@Table(name="jobs")
 public class Job {
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -32,6 +35,8 @@ public class Job {
     private String year;
     private String make;
     private String model;
+
+    @NotNull
     private String description;
 
     public long getId() {
